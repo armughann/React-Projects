@@ -1,5 +1,4 @@
-import { createStore } from "redux";
-import { Provider } from "react-redux";
+import { configureStore } from '@reduxjs/toolkit';
 
 const initialState = {
   quote: "",
@@ -20,6 +19,8 @@ function quoteReducer(state = initialState, action) {
   }
 }
 
-const store = createStore(quoteReducer);
+const store = configureStore({
+  reducer: quoteReducer,
+});
 
 export default store;

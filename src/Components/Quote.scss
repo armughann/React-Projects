@@ -1,0 +1,68 @@
+* {
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+#tweet-quote {
+  margin: 0 0 20% 10%;
+}
+
+#tumblr-quote {
+  margin: 0;
+  margin-bottom: 20%;
+}
+
+#quote-box {
+  width: 60%;
+  height: 50%;
+  padding: 2%;
+  background-color: white;
+  border-radius: 1%;
+  margin: 11% auto;
+}
+
+#text {
+  font-size: 2.4em;
+  text-align: center;
+  line-height: 1.2em;
+  padding: 3% 3% 0 0;
+  margin: 0;
+}
+
+#author {
+  font-size: 1.5em;
+  text-align: right;
+  padding: 3%;
+}
+
+#new-quote {
+  float: right;
+  margin-right: 10%;
+}
+
+
+.fade-in {
+  opacity: 1;
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.fade-out {
+  opacity: 0;
+  animation: fadeOut 1s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  50% { opacity: 0; background-color: var(--fade-color); }
+  100% { opacity: 0; background-color: var(--current-color); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; background-color: var(--current-color); }
+  50% { opacity: 0; background-color: var(--fade-color); }
+  100% { opacity: 1; background-color: var(--fade-color); }
+}
+
+
+
+

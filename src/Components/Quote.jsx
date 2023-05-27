@@ -1,56 +1,56 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaTwitterSquare, FaTumblrSquare, FaQuoteLeft } from "react-icons/fa";
-import "./Quote.css";
+import "./Quote.scss";
 import { useSelector, useDispatch } from "react-redux";
 
 function Quote() {
+  const [fade, setFade] = useState(false);
   const quote = useSelector((state) => state.quote);
   const author = useSelector((state) => state.author);
   const color = useSelector((state) => state.color);
   const dispatch = useDispatch();
 
-  const bgColor = [
-    "#16a085",
-    "#27ae60",
-    "#2c3e50",
-    "#f39c12",
-    "#e74c3c",
-    "#9b59b6",
-    "#FB6964",
-  ];
-
   const getRandomColor = () => {
-    const randomColor = bgColor[Math.floor(Math.random() * bgColor.length)];
+    var x = Math.floor(Math.random() * 256);
+    var y = Math.floor(Math.random() * 256);
+    var z = Math.floor(Math.random() * 256);
+    var randomColor = `rgb(${x}, ${y}, ${z})`;
     dispatch({ type: "SET_COLOR", payload: randomColor });
   };
 
   const getQuote = () => {
-    fetch("https://api.quotable.io/random")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        dispatch({ type: "SET_QUOTE", payload: data.content });
-        dispatch({ type: "SET_AUTHOR", payload: data.author });
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    setFade(true); // Start the fade-out effect
+    setTimeout(() => {
+      fetch("https://api.quotable.io/random")
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          dispatch({ type: "SET_QUOTE", payload: data.content });
+          dispatch({ type: "SET_AUTHOR", payload: data.author });
+          getRandomColor(); // Update the background color
+          setFade(false); // Start the fade-in effect
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }, 500); // Set the delay to match the CSS transition time
   };
 
   useEffect(() => {
-    document.body.style.backgroundColor = color;
-    document.querySelector("#new-quote").style.backgroundColor = color;
-    document.querySelector("#tweet-quote").style.color = color;
-    document.querySelector("#tumblr-quote").style.color = color;
-    document.querySelector("#text").style.color = color;
-    document.querySelector("#author").style.color = color;
-  }, [color]);
+    document.body.style.transition = "background-color 0.5s ease-in-out";
+    document.body.style.backgroundColor = fade ? "transparent" : color;
+    document.body.style.color = fade ? "transparent" : color;
+    document.getElementById("new-quote").style.backgroundColor = fade ? "transparent" : color;
+    // document.getElementById("new-quote").style.color = fade ? "transparent" : "white";
+    document.getElementById("tweet-quote").style.color = fade ? "transparent" : color;
+    document.getElementById("tumblr-quote").style.color = fade ? "transparent" : color;
+  }, [color, fade]);
 
   return (
-    <div className="container-fluid">
+    <div className="container">
       <div id="quote-box">
-        <div className="row">
-          <div id="text" className="col-lg-12">
+        <div className={'row justify-content-center'}>
+          <div id="text" className={`col-xl-10 ${fade ? 'fade-out' : 'fade-in'}`}>
             {quote && (
               <p>
                 <FaQuoteLeft /> {quote}
@@ -58,29 +58,28 @@ function Quote() {
             )}
           </div>
         </div>
-        <div className="row">
-          <div id="author" className="col-ms-12">
+        <div className={'row justify-content-center'}>
+          <div id="author" className={`col-sm-10 ${fade ? 'fade-out' : 'fade-in'}`}>
             {author && <p>- {author}</p>}
           </div>
         </div>
-        <div className="row">
-          <div className="col-1">
+        <div className="row justify-content-center">
+          <div className="col-2">
             <a id="tweet-quote" href="twitter.com/intent/tweet">
               <FaTwitterSquare size={60} />
             </a>
           </div>
-          <div className="col-1">
-            <a id="tumblr-quote" href="twitter.com/intent/tweet">
+          <div className="col-2">
+            <a id="tumblr-quote" href="twitter.com/intent/tweet" target="_blank">
               <FaTumblrSquare size={60} />
             </a>
           </div>
-          <div className="col-10">
+          <div className="col-sm-8">
             <button
               id="new-quote"
               className="btn btn-primary btn-lg border-0"
               onClick={() => {
                 getQuote();
-                getRandomColor();
               }}
             >
               New Quote
